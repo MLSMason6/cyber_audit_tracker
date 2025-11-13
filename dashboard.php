@@ -45,7 +45,7 @@ $resolved = $resolvedQuery->fetchColumn();
             background: #fff;
             padding: 20px;
             border-raidus: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0,1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         h2 { 
             color: #2c3e50;
@@ -63,7 +63,7 @@ $resolved = $resolvedQuery->fetchColumn();
             padding: 20px;
             width: 200px;
             text-align: center;
-            box-shadow: 0 1px 4px rgba(0,0,0,0,1);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
         }
         .card h3 {
             margin: 5px 0;

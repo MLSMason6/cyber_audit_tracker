@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border-raidus: 10px;
             padding: 30px;
             width: 400px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0,1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         h2 { text-align: center; color: #2c3e50; }
         label { display: block; margin-top: 10px; font-weight: bold; }
