@@ -142,8 +142,11 @@ $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
 
             <div>
-                <button tpye="submit">Apply</button>
+                <button type="submit">Apply</button>
                 <a href="view_logs.php" style="margin-left:10px;">Reset</a>
+                <button type="submit" formaction="export_logs.php" formmethod="GET">
+                    Export CSV
+                </button>
             </div>
         </form>
 
