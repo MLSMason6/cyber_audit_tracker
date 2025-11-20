@@ -124,6 +124,9 @@ $vulns = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div>
                 <button type="submit">Apply Filters</button>
                 <a href="manage_vulnerabilities.php" style="margin-left:10px;">Reset</a>
+                <button type="submit" formaction="export_vulnerabilities.php" formmethod="GET">
+                    Export CSV
+                </button>
             </div>
         </form>
 
