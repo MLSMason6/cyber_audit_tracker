@@ -2,30 +2,31 @@
 session_start();
 require_once "includes/db_connect.php";
 
-// Protect this page 
 if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit();
 }
 
-// Get counts for dashboard summary
-$totalQuery = $pdo->query("SELECT COUNT (*) FROM Vulnerabilities");
+$totalQuery = $pdo->query("SELECT COUNT(*) FROM Vulnerabilities");
 $total = $totalQuery->fetchColumn();
 
-$openQuery = $pdo->query("SELECT COUNT (*) FROM Vulernabilities WHERE status = 'Open'");
+$openQuery = $pdo->query("SELECT COUNT(*) FROM Vulnerabilities WHERE status = 'Open'");
 $open = $openQuery->fetchColumn();
 
-$progressQuery = $pdo->query("SELECT COUNT (*) FROM Vulnerabilities WHERE status = 'In Progess'");
+$progressQuery = $pdo->query("SELECT COUNT(*) FROM Vulnerabilities WHERE status = 'In Progress'");
 $progress = $progressQuery->fetchColumn();
 
-$resolvedQuery = $pdo->query("SELECT COUNT (*) FROM Vulnerabilities WHERE status = 'Resolved'");
+$resolvedQuery = $pdo->query("SELECT COUNT(*) FROM Vulnerabilities WHERE status = 'Resolved'");
 $resolved = $resolvedQuery->fetchColumn();
 ?>
 <!DOCTYPE html>
 <html>
 <head>
     <title>Dashboard - Cybersecurity Audit Tracker</title>
-    <script src="assets/chart.min.js"></script>
+
+    <!-- Load Chart.js FIRST -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -44,7 +45,7 @@ $resolved = $resolvedQuery->fetchColumn();
             margin: 30px auto;
             background: #fff;
             padding: 20px;
-            border-raidus: 10px;
+            border-radius: 10px; /* fixed typo */
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         h2 { 
@@ -58,8 +59,8 @@ $resolved = $resolvedQuery->fetchColumn();
             margin-top: 20px;
         }
         .card {
-            background #f7f9fb
-            border-radius: 8px; 
+            background: #f7f9fb; /* fixed missing colon */
+            border-radius: 8px;
             padding: 20px;
             width: 200px;
             text-align: center;
@@ -70,7 +71,7 @@ $resolved = $resolvedQuery->fetchColumn();
         }
         .chart-container { 
             width: 400px;
-            margin: 4opx auto;
+            margin: 40px auto; /* fixed typo */
         }
         .links {
             text-align: center;
@@ -114,37 +115,37 @@ $resolved = $resolvedQuery->fetchColumn();
         </div>
 
         <div class="chart-container">
-            <canvas id ="statusChart"></canvas>
+            <canvas id="statusChart"></canvas>
         </div>
 
         <div class="links">
-            <a href="add_vulnerability.php">➕ Add Vulernability</a>
+            <a href="add_vulnerability.php">➕ Add Vulnerability</a>
             <a href="manage_vulnerabilities.php">📋 Manage Vulnerabilities</a>
             <?php if ($_SESSION['role'] === 'admin'): ?>
                 <a href="register.php">👤 Manage Users</a>
-                <?php endif; ?>
+            <?php endif; ?>
         </div>
     </div>
 
     <script>
         const ctx = document.getElementById('statusChart');
         new Chart(ctx, {
-            type: 'doughnut', 
+            type: 'doughnut',
             data: {
-                labels: ['Open', 'In Progress', 'Resolved'], 
-                datasets:[{
-                    label: 'Vulnerability Status', 
+                labels: ['Open', 'In Progress', 'Resolved'],
+                datasets: [{
+                    label: 'Vulnerability Status',
                     data: [<?= $open ?>, <?= $progress ?>, <?= $resolved ?>],
                     backgroundColor: ['#e74c3c', '#f1c40f', '#2ecc71']
                 }]
-                
             },
             options: {
                 plugins: {
-                    legend: { postion: 'bottom'}
+                    legend: { position: 'bottom' } /* fixed typo */
                 }
             }
         });
     </script>
+
 </body>
 </html>
