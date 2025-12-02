@@ -18,6 +18,18 @@ $progress = $progressQuery->fetchColumn();
 
 $resolvedQuery = $pdo->query("SELECT COUNT(*) FROM Vulnerabilities WHERE status = 'Resolved'");
 $resolved = $resolvedQuery->fetchColumn();
+
+$lowQuery = $pdo->query("SELECT COUNT(*) FROM Vulnerabilities WHERE severity = 'Low'");
+$low = $lowQuery->fetchColumn();
+
+$mediumQuery = $pdo->query("SELECT COUNT(*) FROM Vulnerabilities WHERE severity = 'Medium'");
+$medium = $mediumQuery->fetchColumn();
+
+$highQuery = $pdo->query("SELECT COUNT(*) FROM Vulnerabilities WHERE severity = 'High'");
+$high = $highQuery->fetchColumn();
+
+$criticalQuery = $pdo->query("SELECT COUNT(*) FROM Vulnerabilities WHERE severity = 'Critical'");
+$critical = $criticalQuery->fetchColumn();
 ?>
 <!DOCTYPE html>
 <html>
@@ -118,6 +130,10 @@ $resolved = $resolvedQuery->fetchColumn();
             <canvas id="statusChart"></canvas>
         </div>
 
+        <div class="chart-container">
+            <canvas id="severityChart"></canvas>
+        </div>
+
         <div class="links">
             <a href="add_vulnerability.php">➕ Add Vulnerability</a>
             <a href="manage_vulnerabilities.php">📋 Manage Vulnerabilities</a>
@@ -145,6 +161,27 @@ $resolved = $resolvedQuery->fetchColumn();
                 }
             }
         });
+    </script>
+
+    <script>
+        const severityCtx = document.getElementById('severityChart');
+
+        new Chart(severityCtx, {
+            type: 'doughnut', 
+            data: {
+                labels: ['Low', 'Medium', 'High', 'Critical'],
+                datasets: [{
+                    label: 'Severity Levels',
+                    data: [<?= $low ?>, <?= $medium ?>, <?= $high ?>, <?= $critical ?>],
+                    backgroundColor: [
+                    '#2ecc71',   // Low - green
+                    '#f1c40f',   // Medium - yellow
+                    '#e67e22',   // High - orange
+                    '#e74c3c'    // Critical - red 
+                    ]
+                }]
+            }
+        })
     </script>
 
 </body>
