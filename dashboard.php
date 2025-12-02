@@ -180,8 +180,13 @@ $critical = $criticalQuery->fetchColumn();
                     '#e74c3c'    // Critical - red 
                     ]
                 }]
+            },
+            options: {
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
             }
-        })
+        });
     </script>
 
 </body>
