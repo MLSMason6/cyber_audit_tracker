@@ -30,6 +30,22 @@ $high = $highQuery->fetchColumn();
 
 $criticalQuery = $pdo->query("SELECT COUNT(*) FROM Vulnerabilities WHERE severity = 'Critical'");
 $critical = $criticalQuery->fetchColumn();
+
+$monthQuery = $pdo->query("
+    SELECT DATE_FORMAT(date_found, '%Y-%m') AS month, COUNT (*) AS total
+    FROM Vulnerabilites 
+    WHERE date_found >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH)
+    GROUP BY month
+    ORDER BY month ASC
+");
+
+$months = [];
+$monthCounts = [];
+
+while ($row = $monthQuery->fetch(PDO::FETCH_ASSOC)) {
+    $months[] = $row['month'];
+    $monthCounts[] = $row['total'];
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -134,6 +150,10 @@ $critical = $criticalQuery->fetchColumn();
             <canvas id="severityChart"></canvas>
         </div>
 
+        <div class="chart-container" style="width: 600px;">
+            <canvas id="trendChart"></canvas>
+        </div>
+
         <div class="links">
             <a href="add_vulnerability.php">➕ Add Vulnerability</a>
             <a href="manage_vulnerabilities.php">📋 Manage Vulnerabilities</a>
@@ -188,6 +208,38 @@ $critical = $criticalQuery->fetchColumn();
             }
         });
     </script>
+
+    <script>
+    const trendCtx = document.getElementById('trendChart');
+
+    new Chart(trendCtx, {
+        type: 'line',
+        data: {
+            labels: <?= json_encode($months) ?>,
+            datasets: [{
+                label: 'Vulnerabilities Logged Per Month',
+                data: <?= json_encode($monthCounts) ?>,
+                fill: false,
+                borderColor: '#0078D4',
+                tension: 0.3,
+                pointRadius: 4,
+                pointBackgroundColor: '#0078D4'
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { stepSize: 1 }
+                }
+            },
+            plugins: {
+                legend: { position: 'bottom' }
+            }
+        }
+    });
+</script>
+
 
 </body>
 </html>
