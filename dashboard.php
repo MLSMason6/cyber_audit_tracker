@@ -46,6 +46,15 @@ while ($row = $monthQuery->fetch(PDO::FETCH_ASSOC)) {
     $months[] = $row['month'];
     $monthCounts[] = $row['total'];
 }
+
+$avgTimeQuery = $pdo->("
+    SELECT AVG(DATEDIFF(resolved_date, date_found)) AS avg_days
+    FROM Vulnerabilities 
+    WHERE status = 'Resolved'
+    AND resolved_date IS NOT NULL
+");
+$avgTime = $avgTimeQuery->fetchColumn();
+$avgTime = round($avgTime, 1);
 ?>
 <!DOCTYPE html>
 <html>
@@ -139,6 +148,13 @@ while ($row = $monthQuery->fetch(PDO::FETCH_ASSOC)) {
             <div class="card">
                 <h3>Resolved</h3>
                 <p><?= $resolved ?></p>
+            </div>
+
+            <div class="card">
+                <h3>Resolve Time</h3>
+                <p>
+                    <?= $avgTime ? $avgTime . " days" : "N/A" ?>
+                </p>
             </div>
         </div>
 
