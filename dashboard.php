@@ -55,6 +55,26 @@ $avgTimeQuery = $pdo->("
 ");
 $avgTime = $avgTimeQuery->fetchColumn();
 $avgTime = round($avgTime, 1);
+
+$age30 = $pdo->query("
+    SELECT COUNT(*) FROM Vulnerablities 
+    WHERE status != 'Resolved' 
+    AND DATEDIFF(CURDATE(), date_found) >= 30
+    AND DATEDIFF(CURDATE(), date_found) < 60
+")->fetchColumn();
+
+$age60 = $pdo->query("
+    SELECT COUNT(*) FROM Vulnerablities 
+    WHERE status != 'Resolved' 
+    AND DATEDIFF(CURDATE(), date_found) >= 60
+    AND DATEDIFF(CURDATE(), date_found) < 90
+")->fetchColumn();
+
+$age90 = $pdo->query("
+    SELECT COUNT(*) FROM Vulnerablities 
+    WHERE status != 'Resolved' 
+    AND DATEDIFF(CURDATE(), date_found) >= 90
+")->fetchColumn();
 ?>
 <!DOCTYPE html>
 <html>
@@ -170,6 +190,24 @@ $avgTime = round($avgTime, 1);
             <canvas id="trendChart"></canvas>
         </div>
 
+        <h2>📅 Vulnerability Aging Report</h2>
+
+        <div class="summary">
+            <div class="card">
+                <h3>30+ Days</h3>
+                <p style="color:#e67e22;"><?= $age30</p>
+            </div>
+
+            <div class="card">
+                <h3>60+ Days</h3>
+                <p style="color:#e74c3c;"><?= $age60</p>
+            </div>
+
+            <div class="card">
+                <h3>90+ Days</h3>
+                <p style="color:#c0392b;"><?= $age90</p>
+            </div>
+        </div>
         <div class="links">
             <a href="add_vulnerability.php">➕ Add Vulnerability</a>
             <a href="manage_vulnerabilities.php">📋 Manage Vulnerabilities</a>
